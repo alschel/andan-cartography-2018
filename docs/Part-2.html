@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Александр Шелудков" />
+
+
+<title>Часть 2. Векторные данные</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/spacelab.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 52px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 57px;
+  margin-top: -57px;
+}
+
+.section h2 {
+  padding-top: 57px;
+  margin-top: -57px;
+}
+.section h3 {
+  padding-top: 57px;
+  margin-top: -57px;
+}
+.section h4 {
+  padding-top: 57px;
+  margin-top: -57px;
+}
+.section h5 {
+  padding-top: 57px;
+  margin-top: -57px;
+}
+.section h6 {
+  padding-top: 57px;
+  margin-top: -57px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="Part-1.html">Part 1. Basic concepts</a>
+</li>
+<li>
+  <a href="Part-2.html">Part 2. Data mining. Geocoding</a>
+</li>
+<li>
+  <a href="Part-3.html">Part 3. Spatial data manipulation</a>
+</li>
+<li>
+  <a href="Part-4.html">Part 4. Spatial data visualization</a>
+</li>
+<li>
+  <a href="map.html">Final MAP</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Часть 2. Векторные данные</h1>
+<h4 class="author"><em>Александр Шелудков</em></h4>
+<h4 class="date"><em>24 07 2018</em></h4>
+
+</div>
+
+
+<hr />
+<p>Главные packeges для работы с пространственными данными в R: <code>sp</code> и <code>raster</code>. Они определяют классы объектов, с которыми работают все остальные пакеты.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(sp)
+<span class="kw">library</span>(raster)</code></pre></div>
+<hr />
+<div id="--" class="section level4">
+<h4>2.1. Классы векторных данных</h4>
+<p><strong>Точки</strong> (<em>points</em>) - простейший вид векторных данных. Каждая точка имееи одну координатную пару (x, y).<br />
+<strong>Линия</strong> (<em>line</em>) - набор точек (узлов), соединенный в определенном порядке.<br />
+<strong>Полигон</strong> (<em>polygon</em>) - замкнутая линия: первая координатная пара является и последней.<br />
+В пакете sp им соответствуют различные объекты класса Spatial.</p>
+<p><em>Что значит, что объект относится к классу?</em><br />
+Spatial* object можно представить в виде списка, слоты которого хранят свойства объекта (параметры, методы)</p>
+<p>Давайте создадим объект класса <code>SpatialPoints</code> из 10 случайных точек. Для этого достаточно дать на вход соответствующей функции табличку с координатами</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">12</span>)
+<span class="co"># Широта</span>
+latitude &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="op">-</span><span class="dv">90</span><span class="op">:</span><span class="dv">90</span>, <span class="dv">10</span>, <span class="dt">replace =</span> T)
+<span class="co"># Долгота</span>
+longitude &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="op">-</span><span class="dv">180</span><span class="op">:</span><span class="dv">180</span>, <span class="dv">10</span>, <span class="dt">replace =</span> T)
+lonlat &lt;-<span class="st"> </span><span class="kw">cbind</span>(longitude, latitude)
+pts &lt;-<span class="st"> </span><span class="kw">SpatialPoints</span>(<span class="dt">coords =</span> lonlat)
+<span class="co"># Посмотрим на структуру объекта</span>
+<span class="kw">str</span>(pts)</code></pre></div>
+<pre><code>## Formal class &#39;SpatialPoints&#39; [package &quot;sp&quot;] with 3 slots
+##   ..@ coords     : num [1:10, 1:2] -39 113 -45 -43 -85 -22 -15 15 60 -140 ...
+##   .. ..- attr(*, &quot;dimnames&quot;)=List of 2
+##   .. .. ..$ : NULL
+##   .. .. ..$ : chr [1:2] &quot;longitude&quot; &quot;latitude&quot;
+##   ..@ bbox       : num [1:2, 1:2] -140 -89 113 80
+##   .. ..- attr(*, &quot;dimnames&quot;)=List of 2
+##   .. .. ..$ : chr [1:2] &quot;longitude&quot; &quot;latitude&quot;
+##   .. .. ..$ : chr [1:2] &quot;min&quot; &quot;max&quot;
+##   ..@ proj4string:Formal class &#39;CRS&#39; [package &quot;sp&quot;] with 1 slot
+##   .. .. ..@ projargs: chr NA</code></pre>
+<p>Ничего не забыли? Нужно указать систему координат</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Set the coordinate reference system</span>
+WGS84 &lt;-<span class="st"> </span><span class="kw">CRS</span>(<span class="st">&#39;+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs&#39;</span>)
+pts &lt;-<span class="st"> </span><span class="kw">SpatialPoints</span>(<span class="dt">coords =</span> lonlat, <span class="dt">proj4string =</span> WGS84)
+pts</code></pre></div>
+<pre><code>## class       : SpatialPoints 
+## features    : 10 
+## extent      : -140, 113, -89, 80  (xmin, xmax, ymin, ymax)
+## coord. ref. : +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0</code></pre>
+<p>Чтобы создать <code>SpatialLines</code> и <code>SpatialPlygons</code> воспользуемся функциями <code>spLines()</code> and <code>spPlolygons()</code> из пакета raster</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lns &lt;-<span class="st"> </span><span class="kw">spLines</span>(lonlat, <span class="dt">crs=</span>WGS84)               <span class="co"># линии</span>
+pols &lt;-<span class="st"> </span><span class="kw">spPolygons</span>(lonlat, <span class="dt">crs=</span>WGS84)           <span class="co"># полигоны</span>
+lns</code></pre></div>
+<pre><code>## class       : SpatialLines 
+## features    : 1 
+## extent      : -140, 113, -89, 80  (xmin, xmax, ymin, ymax)
+## coord. ref. : +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pols</code></pre></div>
+<pre><code>## class       : SpatialPolygons 
+## features    : 1 
+## extent      : -140, 113, -89, 80  (xmin, xmax, ymin, ymax)
+## coord. ref. : +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0</code></pre>
+<p>Посмотрим, как это выглядит на карте</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(pols, <span class="dt">col =</span> <span class="st">&quot;#e5f5f9&quot;</span>, <span class="dt">axes =</span> T)           <span class="co"># plot polygon</span>
+<span class="kw">plot</span>(lns, <span class="dt">col =</span> <span class="st">&quot;#99d8c9&quot;</span>, <span class="dt">add =</span> T)             <span class="co"># add lines</span>
+<span class="kw">plot</span>(pts, <span class="dt">col =</span> <span class="st">&quot;#2ca25f&quot;</span>, <span class="dt">pch =</span> <span class="dv">20</span>, <span class="dt">add =</span> T)   <span class="co"># add points</span></code></pre></div>
+<p><img src="Part-2_files/figure-html/simple%20map%20-1.png" width="672" /></p>
+<hr />
+</div>
+<div id="-" class="section level4">
+<h4>2.2. Атрибутивные данные</h4>
+<p><strong>Spatial object</strong> = <strong>geometry</strong> + <strong>attributes</strong></p>
+<p>Данные, привязанные к пространственным объектам, называются <em>атрибутами</em>. Отдельные features мы рассматриваем как наблюдения, а число переменных не ограничено.</p>
+<p>Давайте добавим нашим точкам атрибуты</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Создадим data.frame с данными</span>
+df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">ID=</span><span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(lonlat), <span class="dt">var=</span>longitude<span class="op">^</span><span class="dv">2</span><span class="op">/</span><span class="kw">max</span>(longitude)<span class="op">*</span><span class="dv">10</span>)
+<span class="co"># Получилась вот такая табличечка</span>
+df</code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["ID"],"name":[1],"type":["int"],"align":["right"]},{"label":["var"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"1","2":"134.60177"},{"1":"2","2":"1130.00000"},{"1":"3","2":"179.20354"},{"1":"4","2":"163.62832"},{"1":"5","2":"639.38053"},{"1":"6","2":"42.83186"},{"1":"7","2":"19.91150"},{"1":"8","2":"19.91150"},{"1":"9","2":"318.58407"},{"1":"10","2":"1734.51327"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Соединяем геометрию и атрибуты</span>
+ptsdf &lt;-<span class="st"> </span><span class="kw">SpatialPointsDataFrame</span>(pts, df)
+
+<span class="co"># Визуализируем</span>
+<span class="kw">plot</span>(pols, <span class="dt">col =</span> <span class="st">&quot;#e5f5f9&quot;</span>, <span class="dt">axes =</span> T)           <span class="co"># plot polygon</span>
+<span class="kw">plot</span>(lns, <span class="dt">col =</span> <span class="st">&quot;#99d8c9&quot;</span>, <span class="dt">add =</span> T)             <span class="co"># add lines</span>
+<span class="kw">plot</span>(ptsdf, <span class="dt">col =</span> <span class="st">&quot;#2ca25f&quot;</span>, <span class="dt">pch =</span> <span class="dv">20</span>, 
+     <span class="dt">cex =</span> <span class="kw">log</span>(ptsdf<span class="op">$</span>var),                   <span class="co"># устанавливаем размер точек</span>
+     <span class="dt">add =</span> T)</code></pre></div>
+<p><img src="Part-2_files/figure-html/add%20data-1.png" width="672" /></p>
+<hr />
+</div>
+<div id="-" class="section level4">
+<h4>2.3. Чтение геоданных</h4>
+<p>Третий must-have пакет для работы с пространственными данными в R: <code>rgdal</code>. Это обертка для GDAL/OGR (Geospatial Data Abstraction Library) - открытой библиотеки, написанной на C и используемой во всех ключевых ГИС-программах (ArcGIS, QGIS, SAGA GIS и др.).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(rgdal)</code></pre></div>
+<p>Самые распространенные форматы геоданных - <strong>ESRI Shapefile</strong> и <strong>GeoJSON</strong>.</p>
+<p>Загрузим данные об административно-территориальных границах проекта <a href="https://www.naturalearthdata.com/downloads/10m-cultural-vectors/">Natural Earth</a> из файла в формате shapefile. Для этого используем функцию <code>readOGR()</code> из пакета <code>rgdal</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">countries &lt;-<span class="st"> </span><span class="kw">readOGR</span>(<span class="dt">dsn =</span> <span class="st">&quot;data/world/world.shp&quot;</span>, <span class="dt">stringsAsFactors =</span> F)</code></pre></div>
+<pre><code>## OGR data source with driver: ESRI Shapefile 
+## Source: &quot;data/world/world.shp&quot;, layer: &quot;world&quot;
+## with 255 features
+## It has 11 fields</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">countries</code></pre></div>
+<pre><code>## class       : SpatialPolygonsDataFrame 
+## features    : 255 
+## extent      : -180, 180, -90, 83.6341  (xmin, xmax, ymin, ymax)
+## coord. ref. : +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0 
+## variables   : 11
+## names       :  SOVEREIGNT,              TYPE,       ADMIN,     POP_THS,  GDP_MD_EST, POP_YEAR, GDP_YEAR,                   ECONOMY,           INCOME_GRP, ISO_A2,          REGION_WB 
+## min values  : Afghanistan,           Country, Afghanistan,       0.000,        0.00,        0,        0,   1. Developed region: G7, 1. High income: OECD,    -99,         Antarctica 
+## max values  :    Zimbabwe, Sovereign country,    Zimbabwe, 1379302.771, 21140000.00,     2017,     2016, 7. Least developed region,        5. Low income,     ZW, Sub-Saharan Africa</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(countries)</code></pre></div>
+<p><img src="Part-2_files/figure-html/read%20countries-1.png" width="672" /></p>
+<p>В случае с shapefiles мы также можем использовать обертку для <code>rgdal</code> из пакета <code>raster</code></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Alternatively</span>
+<span class="co"># countries &lt;- shapefile(&quot;data/world/world.shp&quot;, stringsAsFactors = F)</span></code></pre></div>
+<hr />
+</div>
+<div class="section level4">
+<h4>2.4. Картограммы</h4>
+<p>Какие данные хранит <code>countries</code>?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(countries<span class="op">@</span>data)</code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["SOVEREIGNT"],"name":[1],"type":["chr"],"align":["left"]},{"label":["TYPE"],"name":[2],"type":["chr"],"align":["left"]},{"label":["ADMIN"],"name":[3],"type":["chr"],"align":["left"]},{"label":["POP_THS"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["GDP_MD_EST"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["POP_YEAR"],"name":[6],"type":["int"],"align":["right"]},{"label":["GDP_YEAR"],"name":[7],"type":["int"],"align":["right"]},{"label":["ECONOMY"],"name":[8],"type":["chr"],"align":["left"]},{"label":["INCOME_GRP"],"name":[9],"type":["chr"],"align":["left"]},{"label":["ISO_A2"],"name":[10],"type":["chr"],"align":["left"]},{"label":["REGION_WB"],"name":[11],"type":["chr"],"align":["left"]}],"data":[{"1":"Indonesia","2":"Sovereign country","3":"Indonesia","4":"260580.74","5":"3028000","6":"2017","7":"2016","8":"4. Emerging region: MIKT","9":"4. Lower middle income","10":"ID","11":"East Asia & Pacific"},{"1":"Malaysia","2":"Sovereign country","3":"Malaysia","4":"31381.99","5":"863000","6":"2017","7":"2016","8":"6. Developing region","9":"3. Upper middle income","10":"MY","11":"East Asia & Pacific"},{"1":"Chile","2":"Sovereign country","3":"Chile","4":"17789.27","5":"436100","6":"2017","7":"2016","8":"5. Emerging region: G20","9":"3. Upper middle income","10":"CL","11":"Latin America & Caribbean"},{"1":"Bolivia","2":"Sovereign country","3":"Bolivia","4":"11138.23","5":"78350","6":"2017","7":"2016","8":"5. Emerging region: G20","9":"4. Lower middle income","10":"BO","11":"Latin America & Caribbean"},{"1":"Peru","2":"Sovereign country","3":"Peru","4":"31036.66","5":"410400","6":"2017","7":"2016","8":"5. Emerging region: G20","9":"3. Upper middle income","10":"PE","11":"Latin America & Caribbean"},{"1":"Argentina","2":"Sovereign country","3":"Argentina","4":"44293.29","5":"879400","6":"2017","7":"2016","8":"5. Emerging region: G20","9":"3. Upper middle income","10":"AR","11":"Latin America & Caribbean"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p><em>POP_THS: численность наслеения, тыс. чел.</em><br />
+<em>GDP_MD_EST: ВВП, млн $</em></p>
+<p><strong>На этом занятии наша задача - построить картограмму плотности населения по странам</strong></p>
+<p>Для работы с атрибутивными данными и визуализации понадобится еще несколько пакетов</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
+<span class="kw">library</span>(ggplot2)
+<span class="kw">library</span>(classInt)
+<span class="kw">library</span>(RColorBrewer)
+<span class="kw">library</span>(cartography)</code></pre></div>
+<div id="--" class="section level5">
+<h5>2.4.1 Изменение атрибутивных данных</h5>
+<p>Рассчитаем площадь стран с помощью функции <code>area()</code> из пакета <code>raster</code></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">countries<span class="op">@</span>data<span class="op">$</span>AREA &lt;-<span class="st"> </span><span class="kw">area</span>(countries)<span class="op">/</span><span class="dv">1000000</span>  <span class="co"># км2</span>
+<span class="co"># Плотность населения по странам</span>
+countries<span class="op">@</span>data <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">POP_DENS =</span> <span class="kw">round</span>(<span class="dt">x =</span> POP_THS<span class="op">*</span><span class="dv">1000</span><span class="op">/</span>AREA, <span class="dt">digits =</span> <span class="dv">2</span>)) -&gt;<span class="st"> </span>
+<span class="st">  </span>countries<span class="op">@</span>data</code></pre></div>
+<p>Отлично! Однако прежде чем строить саму карту, надо понять, на какие интервалы мы разобьем наблюдения, и выбрать цветовую палитру</p>
+</div>
+<div id="----" class="section level5">
+<h5>2.4.2 Как разделить вектор на интервалы</h5>
+<p>Посмотрим на распределение данных</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">countries<span class="op">@</span>data <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(POP_DENS))<span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> <span class="dv">200</span>)</code></pre></div>
+<p><img src="Part-2_files/figure-html/distr-1.png" width="672" /> Есть выбросы, поэтому равные интервалы не подходят.</p>
+<p>Функция classIntervals() из пакета classInt принимает на вход числовой вектор и возвращает границы интервалов в зависимости от выбранного метода: “fixed”, “sd”, “equal”, “pretty”, “quantile”, “kmeans”, “hclust”, “bclust”, “fisher” или “jenks”</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Я выбрал квантили</span>
+pop_den_ints &lt;-<span class="st"> </span><span class="kw">classIntervals</span>(<span class="dt">var =</span> countries<span class="op">@</span>data<span class="op">$</span>POP_DENS, <span class="dt">n =</span> <span class="dv">7</span>, <span class="dt">style =</span> <span class="st">&quot;quantile&quot;</span>)
+pop_den_ints</code></pre></div>
+<pre><code>## style: quantile
+##        [0,14.02286) [14.02286,30.75571) [30.75571,64.87429) 
+##                  37                  36                  36 
+## [64.87429,96.94286)   [96.94286,181.89)   [181.89,337.2229) 
+##                  37                  36                  36 
+## [337.2229,81941.48] 
+##                  37</code></pre>
+</div>
+<div id="-" class="section level5">
+<h5>2.4.3 Цветовые палитры</h5>
+<p>В R есть встроенный набор цветовых схем, однако у картографов есть свои любимчики. Во-первых, это библиотека <a href="http://colorbrewer2.org/">ColorBrewer</a> и созданный на ее основе пакет <code>RColorBrewer</code>. Во-вторых, <code>viridis</code> - стандартный набор цветовых схем для карт в библиотеке matplotlib.</p>
+</div>
+<div id="--choropleth-map---cartography" class="section level5">
+<h5>2.4.4 Строим картограмму (choropleth map) с помощью Cartography</h5>
+<p>Plot в <code>cartography</code> создается послойно. Сначала рисуем layout, затем основной слой, а сверху добавляем легенду. Для разных типов карт (Label Map, Сhoropleth Ьap, Proportional Symbols, Gridded Map и др.) в пакете есть отдельные функции. В случае с картограммами это <code>choroLayer()</code></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span>(<span class="dt">mar =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>))
+<span class="co"># Layout layer</span>
+<span class="kw">layoutLayer</span>(<span class="dt">title =</span> <span class="st">&quot;Population Density (quantiles)&quot;</span>, <span class="dt">author =</span> <span class="st">&quot;Al.Shel. for AnDan&quot;</span>,
+            <span class="dt">sources =</span> <span class="st">&quot;Natural Earth, 2018&quot;</span>, <span class="dt">col =</span> <span class="ot">NA</span>, <span class="dt">frame =</span> <span class="ot">FALSE</span>,
+            <span class="dt">bg =</span> <span class="st">&quot;#A6CAE0&quot;</span>,
+            <span class="dt">scale =</span> <span class="ot">NULL</span>, <span class="dt">coltitle =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">extent =</span> countries)
+<span class="co"># Основной слой</span>
+<span class="kw">choroLayer</span>(<span class="dt">spdf =</span> countries,                       <span class="co"># объект SpatialPolygonsDataFrame</span>
+           <span class="dt">var =</span> <span class="st">&quot;POP_DENS&quot;</span>,                       <span class="co"># картографируемая переменная (столбец) </span>
+           <span class="dt">border =</span> <span class="st">&quot;grey1&quot;</span>, <span class="dt">lwd =</span> <span class="fl">0.5</span>,            <span class="co"># цвет и толщина границ полигонов</span>
+           <span class="dt">breaks =</span> pop_den_ints<span class="op">$</span>brks,             <span class="co"># границы интервалов</span>
+           <span class="dt">col =</span> <span class="kw">rev</span>(<span class="kw">brewer.pal</span>(<span class="dv">7</span>, <span class="st">&quot;Spectral&quot;</span>)),   <span class="co"># color palette </span>
+           <span class="dt">legend.pos =</span> <span class="st">&quot;n&quot;</span>,                       <span class="co"># none - легенду отрисуем позже</span>
+           <span class="dt">add =</span> T)
+<span class="co"># Легенда</span>
+<span class="kw">legendChoro</span>(<span class="dt">pos =</span> <span class="st">&quot;left&quot;</span>, <span class="dt">title.txt =</span> <span class="st">&quot;per/sq km&quot;</span>, 
+            <span class="dt">values.cex =</span> <span class="fl">0.7</span>, <span class="dt">breaks =</span> pop_den_ints<span class="op">$</span>brks, <span class="dt">values.rnd =</span> <span class="dv">0</span>,
+            <span class="dt">col =</span> <span class="kw">rev</span>(<span class="kw">brewer.pal</span>(<span class="dv">7</span>, <span class="st">&quot;Spectral&quot;</span>)), <span class="dt">frame =</span> T, <span class="dt">symbol =</span> <span class="st">&quot;box&quot;</span>, <span class="dt">nodata =</span> T)</code></pre></div>
+<p><img src="Part-2_files/figure-html/cartogram-1.png" width="672" /></p>
+<p><em>Посмотреть/почитать:</em><br />
+<a href="https://cran.r-project.org/web/packages/cartography/vignettes/cartography.html#base-map-and-proportional-symbols">cartography Vignettes</a></p>
+<hr />
+</div>
+</div>
+<div id="--1" class="section level4">
+<h4>2.5. Самостоятельная работа 1</h4>
+<p><strong>Задание:</strong> с 2012 года CRAN ежедневно публикует <a href="http://cran-logs.rstudio.com">анонимизированные данные</a> о скачивании пакетов для R. Возьмите любой день (вчера? ваш день рождения? и т.д.) и проанализируйте, какие пакеты чаще всего качают пользователи и из каких они стран. <em>Создайте карту, которая показывает территориальное распределение пользователей</em>. Описание структуры данных вы найдете на странице cran-logs.</p>
+<p><em>Подсказка</em>: чтобы найти координаты центроида полигона, используйте <code>coordinates()</code> из пакета <code>sp</code></p>
+<hr />
+</div>
+<div id="-leaflet" class="section level4">
+<h4>2.6. Быстрый leaflet</h4>
+<!-- Cartogram - cartodiagrame -->
+<!-- *** -->
+<!-- **Average prices for housing** vs **"Edinaya Rossiya" election results** in *Moscow* -->
+<!-- ![](resources/ВыборыМосква2017.jpg) -->
+<!-- *Source*: <https://varlamov.ru/2427106.html> -->
+<!-- *** -->
+<!-- ![](resources/London.png) -->
+<!-- Source: <https://www.economist.com/news/britain/21644155-britain-bangladeshis-have-overtaken-pakistanis-credit-poor-job-market-when-they-arrived>   -->
+<!-- **Building Age Maps**   -->
+<!-- Chicago: <http://buildings.transitized.com>   -->
+<!-- Amsterdam: <https://code.waag.org/buildings/#52.3663,4.8883,14> -->
+<!-- *** -->
+<!-- #### 1.1.1 Raster data -->
+<!-- Растр делит территорию на сетку (grid), состояющую из одинаковых прямоугольников - *ячеек* (cells) или пикселей. Размер ячейки - это *разрешение* (resolution) растра. Ячейки кодируют значение переменной (интенсивность явления). Значение ячейки (cell value) - это среднее либо сумма значений территории, которую она покрывает.  -->
+<!-- **ASTER GDEM 2011** elevation data -->
+<!-- ```{r elevation 1, echo=TRUE} -->
+<!-- library(sp) -->
+<!-- library(raster) -->
+<!-- library(RColorBrewer) -->
+<!-- library(lattice) -->
+<!-- library(latticeExtra) -->
+<!-- library(rasterVis) -->
+<!-- # Read raster data -->
+<!-- elev <- raster("data/ASTGTM2_N56E037_dem.tif") -->
+<!-- elev -->
+<!-- ``` -->
+<!-- The natural *coordinate reference system* for geographic data is *longitude/latitude*. In this case x.y show the location of the given point on “spheroid”. However, if we want to make map, we have to transform this three dimensional system to a two dimensional planar system. This transformation is called *projection*. So, by projection you flatten your original spheroid into the plain surface with some mathematical calculations. -->
+<!-- ```{r elevation 2, echo=TRUE} -->
+<!-- # Plot -->
+<!-- levelplot(elev, margin=FALSE, colorkey=list(space='bottom', -->
+<!--                                             labels=list(at=seq(0,350, 50), font=4), -->
+<!--                                             axis.line=list(col='black'), -->
+<!--                                             width=0.75), -->
+<!--           par.settings=list(strip.border=list(col='transparent'), -->
+<!--                             strip.background=list(col='transparent'), -->
+<!--                             axis.line=list(col='transparent')), -->
+<!--           xlab = NULL, -->
+<!--           ylab = NULL, -->
+<!--           scales=list(draw=FALSE), -->
+<!--           col.regions=colorRampPalette(rev(brewer.pal(8, 'RdYlGn'))[1:7]), -->
+<!--           alpha.regions = 0.7, -->
+<!--           at=seq(0,350, 50), -->
+<!--           names.attr="bbb") -->
+<!-- ``` -->
+<!-- Let's take a look at the same area on OpenStreetMap. -->
+<!-- ```{r leaflet, echo=TRUE, out.width="100%"} -->
+<!-- library(leaflet) -->
+<!-- # Load leaflet map -->
+<!-- leaflet() %>% setView(lng = 56.33, lat = 58.3, zoom = 9) %>% addTiles() -->
+<!-- ``` -->
+<!-- <style></style> -->
+<!-- **Other examples**: -->
+<!-- Population Density: <http://luminocity3d.org/WorldPopDen/> -->
+<!-- "A Nation divided" by Die Zeit:   <http://www.zeit.de/feature/german-unification-a-nation-divided> -->
+<!-- **Data sources**:     -->
+<!-- * Open data of the Ministry of Culture of the Russian Federation <https://opendata.mkrf.ru/opendata/>   -->
+<!-- * Open reports of housing and comminal servicies companies <https://www.reformagkh.ru/myhouse?tid=2299765&sort=name&order=asc&page=1&limit=100>    -->
+<!-- * OpenStreetMap <https://www.openstreetmap.org> -->
+<!-- ### More to know about spatial analysis in R: -->
+<!-- <http://rspatial.org/index.html> -->
+</div>
+
+<br><br><br>
+<p><center> &copy; <b>2018</b> Александр Шелудков, Институт географии РАН </center> </p>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
