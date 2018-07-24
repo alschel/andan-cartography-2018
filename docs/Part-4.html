@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Александр Шелудков" />
+
+
+<title>Часть 4. QGIS. OSM. ggplot</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/spacelab.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 52px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 57px;
+  margin-top: -57px;
+}
+
+.section h2 {
+  padding-top: 57px;
+  margin-top: -57px;
+}
+.section h3 {
+  padding-top: 57px;
+  margin-top: -57px;
+}
+.section h4 {
+  padding-top: 57px;
+  margin-top: -57px;
+}
+.section h5 {
+  padding-top: 57px;
+  margin-top: -57px;
+}
+.section h6 {
+  padding-top: 57px;
+  margin-top: -57px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4,h5",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="Part-1.html">1. Базовые концепты</a>
+</li>
+<li>
+  <a href="Part-2.html">2. Векторные данные</a>
+</li>
+<li>
+  <a href="Part-3.html">3. Растровые данные</a>
+</li>
+<li>
+  <a href="Part-4.html">4. Выборки. ggplot</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Часть 4. QGIS. OSM. ggplot</h1>
+<h4 class="author"><em>Александр Шелудков</em></h4>
+<h4 class="date"><em>25 07 2018</em></h4>
+
+</div>
+
+
+<hr />
+<blockquote>
+<p>Everything is related to everything else. But near things are more related than distant things. Waldo R. Tobler</p>
+</blockquote>
+<div id="-qgis" class="section level3">
+<h3>4.1. Быстрый QGIS</h3>
+R обладает богатым функционалом в области анализа и визуализации геоданных. Но иногда нужно сначала взглянуть на данные в десктопной версии, быстро исправить геометрию отдельных объектов, прикинуть, как соотносятся между собой объекты разных слоев. Для этих целей лучше всего подойдет <a href="https://www.qgis.org/">QGIS</a><br />
+
+<div style="width:200px; height:200px">
+<a href="https://www.qgis.org/"><img src="resources/QGis_Logo.png" /></a>
+</div>
+<p>Модуль QuickMapServices позволяет подгружать базовые карты OpenStreetMap, Google, Bin и др.<br />
+Даавайте загрузим стандартную карту OSM и откроем растровый файл с высотами по Москве:</p>
+<p><strong>Слой -&gt; Добавить слой -&gt; Добавить векторный слой -&gt; browse the file</strong></p>
+</div>
+<div id="-openstreetmap" class="section level3">
+<h3>4.2. Данные OpenStreetMap</h3>
+<p><a href="https://www.openstreetmap.org">OpenStreetMap</a> создан руками сообщества энтузиастов. Это открытая, доступная для редактирования карта, на которой собрана информация о дорогах, зданиях, административных границах, природных объектах, POI и других географических объектах. Это открытые данные, а, значит, вы можете использовать их для любых целей до тех пор, пока указываете авторские права OpenStreetMap и его участников.</p>
+<p>Структура данных в OSM отличается от структуры данных в других ГИС, например, для создания сложной геометрии вместо полигонов в OSM принят тип “отношения” (relations). Вместо стандартной атрибутивной таблицы объектам присваиваивается набор тегов по принципу “ключ=значение”. Редакторы сами определяют набор тегов, однако наиболее типичные ситуации описаны в специальных соглашениях. Например, только для обозначения дорог используется <a href="https://wiki.openstreetmap.org/wiki/RU:Highway_classification">несколько десятков тегов</a>. Есть отдельные теги для ????. Таким образом, та информация, которую мы видим на картах, - лишь малая часть данных, созданных сообществом OSM.</p>
+<p>Для выгрузки данных OSM удобно использовать <a href="http://overpass-turbo.eu">overpass-turbo</a>.</p>
+<p>Для примера выгрузим данные OSM по рекам и другим водным объектам:</p>
+<p><strong>Open Query Wizard -&gt; “building” -&gt; build query -&gt; Run</strong></p>
+<p><strong>Export -&gt; Download as GeoJSON</strong></p>
+<hr />
+<div id="-5" class="section level4">
+<h4>4.2.1 Задание 5</h4>
+<p>Скачайте любой точечный и линейный набор данных из OSM и откройте его в QGIS</p>
+<hr />
+</div>
+</div>
+<div id="-" class="section level3">
+<h3>4.3. Пространственные выборки</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">moscow &lt;-<span class="st"> </span><span class="kw">readOGR</span>(<span class="st">&quot;data/mos_ao/ao.shp&quot;</span>)</code></pre></div>
+<pre><code>## OGR data source with driver: ESRI Shapefile 
+## Source: &quot;data/mos_ao/ao.shp&quot;, layer: &quot;ao&quot;
+## with 12 features
+## It has 3 fields</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">rivers &lt;-<span class="st"> </span><span class="kw">readOGR</span>(<span class="st">&quot;data/rivers.geojson&quot;</span>)</code></pre></div>
+<pre><code>## OGR data source with driver: GeoJSON 
+## Source: &quot;data/rivers.geojson&quot;, layer: &quot;OGRGeoJSON&quot;
+## with 978 features
+## It has 88 fields</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bars &lt;-<span class="st"> </span><span class="kw">readOGR</span>(<span class="st">&quot;data/bars.geojson&quot;</span>)</code></pre></div>
+<pre><code>## OGR data source with driver: GeoJSON 
+## Source: &quot;data/bars.geojson&quot;, layer: &quot;OGRGeoJSON&quot;
+## with 524 features
+## It has 65 fields</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">rivers</code></pre></div>
+<pre><code>## class       : SpatialLinesDataFrame 
+## features    : 978 
+## extent      : 36.95705, 38.50033, 55.31397, 56.04867  (xmin, xmax, ymin, ymax)
+## coord. ref. : +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0 
+## variables   : 88
+## names       :           id,         X.id, layer,     name,           tunnel, waterway, wikidata,             wikipedia, boat, motorboat, have_riverbank, name.eo,        source,     name.da,     name.en, ... 
+## min values  : way/10043002, way/10043002,    -1, Алешинка, building_passage,    river, Q1126808, ru:Алтуфьевская речка,   no,        no,             no,  Moskva, Фото, на глаз,      Moskva,    Gorodnja, ... 
+## max values  : way/97942840, way/97942840,     0,     Яуза,              yes,    river, Q4536378,               ru:Яуза,  yes,       yes,            yes, Siniĉka,         yahoo, Yauzafloden, Yauza River, ...</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bars</code></pre></div>
+<pre><code>## class       : SpatialPointsDataFrame 
+## features    : 524 
+## extent      : 36.94898, 38.21713, 55.42753, 56.02171  (xmin, xmax, ymin, ymax)
+## coord. ref. : +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0 
+## variables   : 65
+## names       :              id,            X.id, amenity,      name,       addr.city, addr.country, addr.housenumber,          addr.street,                    contact.phone,       contact.website,     name.en,        name.ru,             website, contact.facebook,                        opening_hours, ... 
+## min values  : node/1005385541, node/1005385541,     bar,  &quot;Каприз&quot;, Железнодорожный,           RU,                1, 1-я Дубровская улица, + 7 495 6236913; + 7 495 6236459,    http://bagabar.com, Мint Lounge, Амстел Боулинг,  glastonberrypub.ru, coffeeandwinebar,                          10:00-23:00, ... 
+## max values  :  node/971038731,  node/971038731,     bar, Wunderbar,         Пушкино,           RU,            98 к1,      Яблоневая аллея,     https://new.vk.com/craftberi, https://www.kotbar.ru, Zhiga Dryga,     SpielBEERg, www.vk.com/zapivcom,  wunderbarmoscow, We,Th 12:00-24:00; Fr,Sa 18:00-06:00, ...</code></pre>
+<p>Предположим, мы хотим найти бары в 300 м от реки. Для этого построим буфер и выделим точки внутри этого буфера. Однако в ситуации с нашими данными есть одно большое НО. Какое?</p>
+<div class="section level4">
+<h4>4.3.1 Перепроецирование</h4>
+<p>The Universal Transverse Mercator (UTM) делит Землю на 60 зон по 6 градусов. Москва находится в зоне <a href="http://spatialreference.org/ref/epsg/32637/">37N</a></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Определим CRS</span>
+UTM &lt;-<span class="st"> </span>sp<span class="op">::</span><span class="kw">CRS</span>(<span class="st">&quot;+proj=utm +zone=37 +ellps=WGS84 +datum=WGS84 +units=m +no_defs&quot;</span>)
+<span class="co"># Перепроецируем данные</span>
+moscow_utm &lt;-<span class="st"> </span><span class="kw">aggregate</span>(moscow) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">spTransform</span>(UTM)
+rivers_utm &lt;-<span class="st"> </span><span class="kw">spTransform</span>(rivers, UTM)
+bars_utm &lt;-<span class="st"> </span><span class="kw">spTransform</span>(bars, UTM)</code></pre></div>
+<p>Проверим</p>
+</div>
+<div id="intersection" class="section level4">
+<h4>4.3.2 Intersection</h4>
+<p>Обрежем реки по границе Москвы. Для этого используем <code>intersect()</code> из пакета <code>raster</code></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">raster<span class="op">::</span><span class="kw">intersect</span>(rivers_utm, moscow_utm) -&gt;<span class="st"> </span>rivers_utm</code></pre></div>
+<p>Строим буфер вокруг рек</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(rgeos)
+<span class="kw">gBuffer</span>(rivers_utm, <span class="dt">width =</span> <span class="dv">300</span>) -&gt;<span class="st"> </span>river_buffer</code></pre></div>
+<p>Выделим бары внутри буфера</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bars_utm <span class="op">%&gt;%</span><span class="st"> </span>raster<span class="op">::</span><span class="kw">intersect</span>(river_buffer) -&gt;<span class="st"> </span>my_bars
+<span class="kw">plot</span>(my_bars)
+<span class="kw">plot</span>(river_buffer, <span class="dt">add =</span> T)</code></pre></div>
+<p><img src="Part-4_files/figure-html/my%20bars-1.png" width="672" /></p>
+</div>
+</div>
+<div id="ggplot-----" class="section level3">
+<h3>4.4. ggplot() - великий и ужасный</h3>
+</div>
+
+<br><br><br>
+<p><center> &copy; <b>2018</b> Александр Шелудков, Институт географии РАН </center> </p>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

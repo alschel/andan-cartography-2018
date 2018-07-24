@@ -1,9 +1,9 @@
 # Часть 2. Векторные данные
 # Автор: Александр Шелудков, ИГРАН
-# Дата: 24.07.2018
+# Дата: 25.07.2018
 
 
-# Главные packeges для работы с пространственными данными в R: `sp` и `raster`. 
+# Главные packages для работы с пространственными данными в R: `sp` и `raster`. 
 # Они определяют классы объектов, с которыми работают все остальные пакеты.
 
 library(sp)
@@ -177,7 +177,7 @@ pop_den_ints
 par(mar = c(1,0,1,0))
 
 # Layout layer
-layoutLayer(title = "Population Density", author = "Al.Shel. for AnDan",
+layoutLayer(title = "Population Density (2017)", author = "Al.Shel. for AnDan",
             sources = "Natural Earth, 2018", col = NA, frame = FALSE,
             bg = "#A6CAE0",
             scale = NULL, coltitle = "black", extent = countries)
@@ -211,15 +211,67 @@ legendChoro(pos = "left", title.txt = "per/sq km",
 # 2.5. Самостоятельная работа 2
 # =============================
 
-# Задание: с 2012 года CRAN ежедневно публикует [анонимизированные данные](http://cran-logs.rstudio.com) 
+# Задание: с 2012 года CRAN ежедневно публикует анонимизированные данные (http://cran-logs.rstudio.com) 
 # о скачивании пакетов для R. Возьмите любой день (вчера? ваш день рождения? и т.д.) и проанализируйте, 
-# какие пакеты чаще всего качают пользователи и из каких они стран. *Создайте карту, которая показывает 
-# территориальное распределение пользователей*. 
+# какие пакеты чаще всего качают пользователи и из каких они стран. Создайте карту, которая показывает 
+# территориальное распределение пользователей. 
 # Описание структуры данных вы найдете на странице cran-logs.  
                            
-# Подсказка: чтобы найти координаты центроида полигона, используйте `coordinates()` из пакета `sp`   
+# Подсказка: чтобы найти координаты центроида полигона, используйте coordinates() из пакета sp   
 
 # ====================
 # 2.6. Быстрый leaflet
 # ====================
-                          
+
+# Leaflet - самая популярная открытая JS-библиотека для веб-картографии. 
+# Она лежит в основе OSM (https://www.openstreetmap.org/) и сервисов Mapbox (https://www.mapbox.com).   
+
+library(leaflet)
+
+# Принцип построения карты в leaflet напоминает ggplot  
+# Сначала мы создаем объект карты с помощью собственно функции leaflet(). 
+# Внутри нее определяем данные, с которыми будем работать, размеры карты и др. options. 
+# Далее наполняем карту слоями
+leaflet(data = countries) %>% 
+  addTiles() %>%                            # в качестве "фона" можно добавить базовую карту OSM
+  # Добавляем полигональный слой (сountries)
+  addPolygons(color = "#steelblue3",        # цвет границ
+              weight = 1,                   # толщина границ
+              opacity = .7,                 # прозрачность границ
+              smoothFactor = 0.5,           # сглаживание границ на разных zoom-уровнях
+              fillColor = "#FFF",           # цвет полигона
+              fillOpacity = 0.6,            # прозрачность полигона
+              # Действие на mouse-over
+              highlightOptions = highlightOptions(color = "blue", 
+                                                  weight = 2, bringToFront = F),
+              label = ~countries$ISO_A2)
+
+# Для картограммы предварительно определим функцию, 
+# которая будет принимать в качестве аргумента вектор чисел и возвращать вектор цветов
+# Для этого используем функцию leaflet::colorBin()
+makeMyColors <- colorBin("Spectral", domain = countries$POP_DENS, bins = pop_den_ints$brks, reverse = T)
+
+leaflet(data = countries) %>%
+  # Базовая карта
+  addTiles() %>%
+  # Полигональный слой
+  addPolygons(fillColor = ~makeMyColors(POP_DENS), # определяем цвет заливки
+              fillOpacity = 0.7,                   # прозрачность заливки
+              weight = 1, color = "white",         # толщина и цвет границ
+              opacity = 0.7, smoothFactor = 0.5,   # прозорачность и сглаживание границ
+              label = ~ISO_A2,
+              popup = ~as.character(POP_DENS)) %>% # popup на клике будет показывать значение переменной
+  # Легенда
+  addLegend("topleft", pal = makeMyColors, 
+            values = ~POP_DENS,
+            title = "Population Density (2018),<br/>pers/sq km",
+            labFormat = labelFormat(digits = 0),
+            opacity = 1)
+
+
+# 2.6.1. Самостоятельная работа 3
+
+# Задание: сделайте карту распределения пользователей R из предыдущего задания интерактивной. 
+# Используйте возможности библиотеки leaflet, включая zoom, labels и popups. 
+# Не забудьте легенду и подпись к карте.
+

@@ -1,0 +1,113 @@
+---
+title: "Часть 4. QGIS. OSM. ggplot"
+author: "Александр Шелудков"
+date: "25 07 2018"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 5
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r libraries 4, include=FALSE}
+library(dplyr)
+library(sp)
+library(raster)
+library(rgdal)
+library(ggplot2)
+```
+
+***
+
+> Everything is related to everything else. But near things are more related than distant things.
+> Waldo R. Tobler
+
+### 4.1. Быстрый QGIS
+
+R обладает богатым функционалом в области анализа и визуализации геоданных. Но иногда нужно сначала взглянуть на данные в десктопной версии, быстро исправить геометрию отдельных объектов, прикинуть, как соотносятся между собой объекты разных слоев. Для этих целей лучше всего подойдет [QGIS](https://www.qgis.org/)    
+<div style="width:200px; height:200px"><a href="https://www.qgis.org/">![](resources/QGis_Logo.png)</a></div>  
+
+Модуль QuickMapServices позволяет подгружать базовые карты OpenStreetMap, Google, Bin и др.  
+Даавайте загрузим стандартную карту OSM и откроем растровый файл с высотами по Москве:  
+
+**Слой -> Добавить слой -> Добавить векторный слой -> browse the file**  
+
+### 4.2. Данные OpenStreetMap
+
+[OpenStreetMap](https://www.openstreetmap.org) создан руками сообщества энтузиастов. Это открытая, доступная для редактирования карта, на которой собрана информация о дорогах, зданиях, административных границах, природных объектах, POI и других географических объектах. Это открытые данные, а, значит, вы можете использовать их для любых целей до тех пор, пока указываете авторские права OpenStreetMap и его участников.  
+
+Структура данных в OSM отличается от структуры данных в других ГИС, например, для создания сложной геометрии вместо полигонов в OSM принят тип "отношения" (relations). Вместо стандартной атрибутивной таблицы объектам присваиваивается набор тегов по принципу "ключ=значение". Редакторы сами определяют набор тегов, однако наиболее типичные ситуации описаны в специальных соглашениях. Например, только для обозначения дорог используется [несколько десятков тегов](https://wiki.openstreetmap.org/wiki/RU:Highway_classification). Есть отдельные теги для ????. Таким образом, та информация, которую мы видим на картах, - лишь малая часть данных, созданных сообществом OSM.
+
+Для выгрузки данных OSM удобно использовать [overpass-turbo](http://overpass-turbo.eu).  
+
+Для примера выгрузим данные OSM по рекам и другим водным объектам:
+
+**Open Query Wizard -> "building" -> build query -> Run**
+
+**Export -> Download as GeoJSON**
+
+***
+
+#### 4.2.1 Задание 5
+
+Скачайте любой точечный и линейный набор данных из OSM и откройте его в QGIS  
+
+***
+
+### 4.3. Пространственные выборки
+
+```{r read data, echo=TRUE, message=FALSE, warning=FALSE}
+moscow <- readOGR("data/mos_ao/ao.shp")
+rivers <- readOGR("data/rivers.geojson")
+bars <- readOGR("data/bars.geojson")
+rivers
+bars
+```
+
+Предположим, мы хотим найти бары в 300 м от реки. Для этого построим буфер и выделим точки внутри этого буфера. Однако в ситуации с нашими данными есть одно большое НО. Какое?  
+
+####  4.3.1 Перепроецирование
+
+The Universal Transverse Mercator (UTM) делит Землю на 60 зон по 6 градусов. Москва находится в зоне [37N](http://spatialreference.org/ref/epsg/32637/)  
+```{r crs trans, echo=TRUE, message=FALSE, warning=FALSE}
+# Определим CRS
+UTM <- sp::CRS("+proj=utm +zone=37 +ellps=WGS84 +datum=WGS84 +units=m +no_defs")
+# Перепроецируем данные
+moscow_utm <- aggregate(moscow) %>% spTransform(UTM)
+rivers_utm <- spTransform(rivers, UTM)
+bars_utm <- spTransform(bars, UTM)
+```
+
+Проверим
+
+```{r rivers crs check, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+rivers_utm
+```
+
+#### 4.3.2 Intersection
+
+Обрежем реки по границе Москвы. Для этого используем `intersect()` из пакета `raster`  
+
+```{r rivers utm, echo=TRUE, message=FALSE, warning=FALSE}
+raster::intersect(rivers_utm, moscow_utm) -> rivers_utm
+```
+
+Строим буфер вокруг рек  
+```{r rivers buffer, echo=TRUE, message=FALSE, warning=FALSE}
+library(rgeos)
+gBuffer(rivers_utm, width = 300) -> river_buffer
+```
+
+Выделим бары внутри буфера   
+```{r my bars, echo=TRUE, message=FALSE, warning=FALSE}
+bars_utm %>% raster::intersect(river_buffer) -> my_bars
+plot(my_bars)
+plot(river_buffer, add = T)
+```
+
+### 4.4. ggplot() - великий и ужасный
+
+

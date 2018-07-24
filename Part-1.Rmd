@@ -1,11 +1,11 @@
 ---
 title: "Часть 1. Базовые концепты"
 author: "Александр Шелудков"
-date: "24 07 2018"
+date: "25 07 2018"
 output: 
   html_document:
     toc: true
-    toc_depth: 4
+    toc_depth: 5
 ---
 
 ```{r setup, include=FALSE}
@@ -18,8 +18,10 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ***
 
-Everything is related to everything else. But near things are more related than distant things.
-Waldo R. Tobler
+> Everything is related to everything else. But near things are more related than distant things.  
+> Waldo R. Tobler
+
+***
 
 ### 1.1. Пространственные явления и данные
 

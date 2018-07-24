@@ -1,7 +1,7 @@
 ---
 title: "Часть 2. Векторные данные"
 author: "Александр Шелудков"
-date: "24 07 2018"
+date: "25 07 2018"
 output: 
   html_document:
     toc: true
@@ -13,6 +13,12 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ***
+
+> Everything is related to everything else. But near things are more related than distant things.  
+> Waldo R. Tobler
+
+***
+
 Главные packages для работы с пространственными данными в R: `sp` и `raster`. Они определяют классы объектов, с которыми работают все остальные пакеты.
 
 ```{r first packages, echo=TRUE, message=FALSE, warning=FALSE}
@@ -208,15 +214,15 @@ legendChoro(pos = "left", title.txt = "per/sq km",
 
 ***
 
-#### 2.4.5. Самостоятельная работа 1
+##### 2.4.5. Задание 1
 
-**Задание:** Рассчитайте для стран ВВП на душу населения, разбейте на собственное усмотрение полученные наблюдения на группы (страны с высоким GDP per capita, средним и пр.) и отобразите эти группы на карте.
+Рассчитайте для стран ВВП на душу населения, разбейте на собственное усмотрение полученные наблюдения на группы (страны с высоким GDP per capita, средним и пр.) и отобразите эти группы на карте.
 
 ***
 
-#### 2.5. Самостоятельная работа 2
+#### 2.5. Задание 2
 
-**Задание:** с 2012 года CRAN ежедневно публикует [анонимизированные данные](http://cran-logs.rstudio.com) о скачивании пакетов для R. Возьмите любой день/дни (вчера? ваш день рождения? и т.д.) и проанализируйте, какие пакеты чаще всего качают пользователи и из каких они стран. *Создайте карту, которая показывает территориальное распределение пользователей*. Описание структуры данных вы найдете на странице cran-logs.  
+С 2012 года CRAN ежедневно публикует [анонимизированные данные](http://cran-logs.rstudio.com) о скачивании пакетов для R. Возьмите любой день/дни и проанализируйте, какие пакеты чаще всего качают пользователи и из каких они стран. *Создайте карту, которая показывает территориальное распределение пользователей*. Описание структуры данных вы найдете на странице cran-logs.  
 
 *Подсказка*: чтобы найти координаты центроида полигона, используйте `coordinates()` из пакета `sp`  
 
@@ -224,84 +230,68 @@ legendChoro(pos = "left", title.txt = "per/sq km",
 
 #### 2.6. Быстрый leaflet
 
+[Leaflet](https://leafletjs.com) - самая популярная открытая JS-библиотека для веб-картографии. Она лежит в основе [OSM](https://www.openstreetmap.org/) и сервисов [Mapbox](https://www.mapbox.com).   
+
+```{r leaflet, echo=TRUE, message=FALSE, warning=FALSE}
+library(leaflet)
+```
+
+Принцип построения карты в leaflet напоминает ggplot  
+Сначала мы создаем объект карты с помощью собственно функции `leaflet()`. Внутри нее определяем данные, с которыми будем работать, размеры карты и др. options. Далее наполняем карту слоями  
+```{r leaflet map, echo=TRUE, message=FALSE, warning=FALSE}
+leaflet(data = countries) %>% 
+  addTiles() %>%                            # в качестве "фона" можно добавить базовую карту OSM
+  # Добавляем полигональный слой (сountries)
+  addPolygons(color = "#steelblue3",        # цвет границ
+              weight = 1,                   # толщина границ
+              opacity = .7,                 # прозрачность границ
+              smoothFactor = 0.5,           # сглаживание границ на разных zoom-уровнях
+              fillColor = "#FFF",           # цвет полигона
+              fillOpacity = 0.6,            # прозрачность полигона
+              # Действие на mouse-over
+              highlightOptions = highlightOptions(color = "blue", 
+                                                  weight = 2, bringToFront = F),
+              label = ~countries$ISO_A2)
+```
+
+Для картограммы предварительно определим функцию, которая будет принимать в качестве аргумента вектор чисел и возвращать вектор цветов. Для этого используем функцию `leaflet::colorBin()`  
+```{r leaflet cartogram, echo=TRUE, message=FALSE, warning=FALSE}
+
+# Создаем функцию
+makeMyColors <- colorBin("Spectral",                      # цветовая палитра из набор RColorBrewer
+                         reverse = T,                     # обратим ее
+                         domain = countries$POP_DENS,     # вектор возможных значений
+                         bins = pop_den_ints$brks)        # гринцы интервалов
+
+# Рисуем карту
+leaflet(data = countries,
+        options = leafletOptions(minZoom = 2, maxZoom = 15)) %>%
+  # Базовая карта
+  addTiles() %>%
+  # Полигональный слой
+  addPolygons(fillColor = ~makeMyColors(POP_DENS), # определяем цвет заливки
+              fillOpacity = 0.7,                   # прозрачность заливки
+              weight = 1, color = "white",         # толщина и цвет границ
+              opacity = 0.7, smoothFactor = 0.5,   # прозорачность и сглаживание границ
+              label = ~ISO_A2,
+              popup = ~as.character(POP_DENS)) %>% # popup на клике будет показывать значение переменной
+  # Легенда
+  addLegend("topleft", pal = makeMyColors, 
+            values = ~POP_DENS,
+            title = "Population Density (2018),<br/>pers/sq km",
+            labFormat = labelFormat(digits = 0),
+            opacity = 1)
+```
+
+*Посмотреть/почитать:*  
+[Leaflet for R](https://rstudio.github.io/leaflet/)  
 
 
-<!-- Cartogram - cartodiagrame -->
+##### 2.6.1. Задание 3
 
-<!-- *** -->
+Сделайте карту распределения пользователей R из задания 2 интерактивной. Используйте возможности библиотеки leaflet, включая zoom, labels и popups. Не забудьте легенду и подпись к карте.  
 
-<!-- **Average prices for housing** vs **"Edinaya Rossiya" election results** in *Moscow* -->
-
-<!-- ![](resources/ВыборыМосква2017.jpg) -->
-<!-- *Source*: <https://varlamov.ru/2427106.html> -->
-
-<!-- *** -->
-
-<!-- ![](resources/London.png) -->
-<!-- Source: <https://www.economist.com/news/britain/21644155-britain-bangladeshis-have-overtaken-pakistanis-credit-poor-job-market-when-they-arrived>   -->
-
-<!-- **Building Age Maps**   -->
-<!-- Chicago: <http://buildings.transitized.com>   -->
-<!-- Amsterdam: <https://code.waag.org/buildings/#52.3663,4.8883,14> -->
-
-<!-- *** -->
-
-
-<!-- #### 1.1.1 Raster data -->
-
-<!-- Растр делит территорию на сетку (grid), состояющую из одинаковых прямоугольников - *ячеек* (cells) или пикселей. Размер ячейки - это *разрешение* (resolution) растра. Ячейки кодируют значение переменной (интенсивность явления). Значение ячейки (cell value) - это среднее либо сумма значений территории, которую она покрывает.  -->
-
-<!-- **ASTER GDEM 2011** elevation data -->
-
-<!-- ```{r elevation 1, echo=TRUE} -->
-
-<!-- library(sp) -->
-<!-- library(raster) -->
-<!-- library(RColorBrewer) -->
-<!-- library(lattice) -->
-<!-- library(latticeExtra) -->
-<!-- library(rasterVis) -->
-
-<!-- # Read raster data -->
-<!-- elev <- raster("data/ASTGTM2_N56E037_dem.tif") -->
-<!-- elev -->
-<!-- ``` -->
-
-<!-- The natural *coordinate reference system* for geographic data is *longitude/latitude*. In this case x.y show the location of the given point on “spheroid”. However, if we want to make map, we have to transform this three dimensional system to a two dimensional planar system. This transformation is called *projection*. So, by projection you flatten your original spheroid into the plain surface with some mathematical calculations. -->
-
-<!-- ```{r elevation 2, echo=TRUE} -->
-<!-- # Plot -->
-<!-- levelplot(elev, margin=FALSE, colorkey=list(space='bottom', -->
-<!--                                             labels=list(at=seq(0,350, 50), font=4), -->
-<!--                                             axis.line=list(col='black'), -->
-<!--                                             width=0.75), -->
-<!--           par.settings=list(strip.border=list(col='transparent'), -->
-<!--                             strip.background=list(col='transparent'), -->
-<!--                             axis.line=list(col='transparent')), -->
-<!--           xlab = NULL, -->
-<!--           ylab = NULL, -->
-<!--           scales=list(draw=FALSE), -->
-<!--           col.regions=colorRampPalette(rev(brewer.pal(8, 'RdYlGn'))[1:7]), -->
-<!--           alpha.regions = 0.7, -->
-<!--           at=seq(0,350, 50), -->
-<!--           names.attr="bbb") -->
-
-<!-- ``` -->
-
-<!-- Let's take a look at the same area on OpenStreetMap. -->
-
-<!-- ```{r leaflet, echo=TRUE, out.width="100%"} -->
-<!-- library(leaflet) -->
-<!-- # Load leaflet map -->
-<!-- leaflet() %>% setView(lng = 56.33, lat = 58.3, zoom = 9) %>% addTiles() -->
-
-<!-- ``` -->
-<!-- <style></style> -->
-
-<!-- **Other examples**: -->
-<!-- Population Density: <http://luminocity3d.org/WorldPopDen/> -->
-<!-- "A Nation divided" by Die Zeit:   <http://www.zeit.de/feature/german-unification-a-nation-divided> -->
-
+***
 
 
 <!-- **Data sources**:     -->

@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Александр Шелудков" />
+
+
+<title>Часть 3. Растровые данные</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/spacelab.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 52px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 57px;
+  margin-top: -57px;
+}
+
+.section h2 {
+  padding-top: 57px;
+  margin-top: -57px;
+}
+.section h3 {
+  padding-top: 57px;
+  margin-top: -57px;
+}
+.section h4 {
+  padding-top: 57px;
+  margin-top: -57px;
+}
+.section h5 {
+  padding-top: 57px;
+  margin-top: -57px;
+}
+.section h6 {
+  padding-top: 57px;
+  margin-top: -57px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3,h4,h5",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="Part-1.html">1. Базовые концепты</a>
+</li>
+<li>
+  <a href="Part-2.html">2. Векторные данные</a>
+</li>
+<li>
+  <a href="Part-3.html">3. Растровые данные</a>
+</li>
+<li>
+  <a href="Part-4.html">4. Выборки. ggplot</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Часть 3. Растровые данные</h1>
+<h4 class="author"><em>Александр Шелудков</em></h4>
+<h4 class="date"><em>25 07 2018</em></h4>
+
+</div>
+
+
+<hr />
+<blockquote>
+<p>You can never understand everything. But you should push yourself to understand the system.<br />
+Ryan Dahl</p>
+</blockquote>
+<hr />
+<div id="---" class="section level3">
+<h3>3.1. Что такое растровое изображение?</h3>
+<p>Что показывают эти <a href="https://www.google.com/search?q=%D1%81%D0%BD%D0%B8%D0%BC%D0%BA%D0%B8+%D1%85%D0%B0%D0%B1%D0%B1%D0%BB&amp;client=safari&amp;rls=en&amp;source=lnms&amp;tbm=isch&amp;sa=X&amp;ved=0ahUKEwjf6sywlLfcAhUlM5oKHUU-Ag4Q_AUICigB&amp;biw=1440&amp;bih=839">снимки</a>?</p>
+<p>Мы видим лишь небольшую часть спектра электромагнитного излучения<br />
+<img src="resources/EM_spectrum.svg" /> <em>Source</em>: <a href="https://ru.wikipedia.org/wiki/Электромагнитное_излучение#/media/File:EM_spectrum.svg" class="uri">https://ru.wikipedia.org/wiki/Электромагнитное_излучение#/media/File:EM_spectrum.svg</a></p>
+<p>На самом деле, совершенно не обязательно при построении растровых изображений ограничиваться только видимой частью излучения Мы можем комбинировать каналы. Этот прием чаще всего исопьзуется при анализе и дешифрировании космоснимков</p>
+<p><a href="https://www.harrisgeospatial.com/Learn/Blogs/Blog-Details/TabId/2716/ArtMID/10198/ArticleID/15691/The-Many-Band-Combinations-of-Landsat-8.aspx">Примеры</a></p>
+<p><a href="http://www.geocarto.com.hk/edu/PJ-BCMBLSAT/main_BCLS.html">Landsat band combinations interactive tool</a></p>
+<p>Растровые изображения можно представить как числовые матрицы, которые хранят в ячейках значения переменных</p>
+<div class="figure">
+<img src="resources/grid_prop.gif" />
+
+</div>
+<p>Категориальные данные: пример - <a href="http://www.globeland30.com/GLC30Download/index.aspx">Glabal Land Cover</a></p>
+<p>Как и с другими матрицами, с растровыми изображениями можно проводить математические операции: складывать, вычитать, умножать, возводить в степень и т.п. (raster algebra)</p>
+<hr />
+</div>
+<div id="----r" class="section level3">
+<h3>3.2. Классы растровых изображений в R</h3>
+<p><code>raster</code> позволяет создавать объекты трех классов: <code>RasterLayer</code>, <code>RasterStack</code> и <code>RasterBrick</code></p>
+<p><code>RasterLayer</code> состоит из 1 слоя (1 переменная)</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(raster)
+r &lt;-<span class="st"> </span><span class="kw">raster</span>(<span class="dt">ncol=</span><span class="dv">10</span>, <span class="dt">nrow=</span><span class="dv">10</span>, <span class="dt">xmx=</span><span class="op">-</span><span class="dv">80</span>, <span class="dt">xmn=</span><span class="op">-</span><span class="dv">150</span>, <span class="dt">ymn=</span><span class="dv">20</span>, <span class="dt">ymx=</span><span class="dv">60</span>)
+r</code></pre></div>
+<pre><code>## class       : RasterLayer 
+## dimensions  : 10, 10, 100  (nrow, ncol, ncell)
+## resolution  : 7, 4  (x, y)
+## extent      : -150, -80, 20, 60  (xmin, xmax, ymin, ymax)
+## coord. ref. : +proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0</code></pre>
+<p>В данном примере мы создали RasterLayer, состоящий из 100 ячеек (10*10). Обратите внимание на систему координат объекта. В каких единицах указано разрешение растра (размеры одной ячейки)?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">values</span>(r) <span class="co"># Сейчас ячейки пустые</span></code></pre></div>
+<pre><code>##   [1] NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA
+##  [24] NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA
+##  [47] NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA
+##  [70] NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA
+##  [93] NA NA NA NA NA NA NA NA</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Наполним их значениями</span>
+<span class="kw">values</span>(r) &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="kw">ncell</span>(r)
+<span class="kw">plot</span>(r)</code></pre></div>
+<p><img src="Part-3_files/figure-html/raster%20values-1.png" width="672" /></p>
+<p><code>RasterStack</code> и <code>RasterBrick</code> это классы растровых объектов с множеством слоев. Разница в том, как они хранят данные: <code>RasterStack</code> - это список (list) из нескольких файлов или слоев (“bands”) одного файла, имеющих одинаковый экстент и разрешение. <code>RasterBrick</code> - это всегда один многослойный объект, поэтому расчеты с ним могут быть быстрее.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># RasterStack</span>
+s &lt;-<span class="st"> </span><span class="kw">stack</span>(r, r<span class="op">*</span>r)
+s</code></pre></div>
+<pre><code>## class       : RasterStack 
+## dimensions  : 10, 10, 100, 2  (nrow, ncol, ncell, nlayers)
+## resolution  : 7, 4  (x, y)
+## extent      : -150, -80, 20, 60  (xmin, xmax, ymin, ymax)
+## coord. ref. : +proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0 
+## names       : layer.1, layer.2 
+## min values  :       1,       1 
+## max values  :     100,   10000</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># RasterBrick</span>
+b &lt;-<span class="st"> </span><span class="kw">brick</span>(s)
+b</code></pre></div>
+<pre><code>## class       : RasterBrick 
+## dimensions  : 10, 10, 100, 2  (nrow, ncol, ncell, nlayers)
+## resolution  : 7, 4  (x, y)
+## extent      : -150, -80, 20, 60  (xmin, xmax, ymin, ymax)
+## coord. ref. : +proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0 
+## data source : in memory
+## names       : layer.1, layer.2 
+## min values  :       1,       1 
+## max values  :     100,   10000</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(b)</code></pre></div>
+<p><img src="Part-3_files/figure-html/stack%20and%20brick-1.png" width="672" /></p>
+</div>
+<div id="--" class="section level3">
+<h3>3.3. Чтение растровых данных</h3>
+<p>Для примера посмотрим на данные о высотах из проекта <em>ASTER GDEM 2011</em></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Read raster data</span>
+elev &lt;-<span class="st"> </span><span class="kw">raster</span>(<span class="st">&quot;data/ASTGTM2_N55E037_dem.tif&quot;</span>)
+elev</code></pre></div>
+<pre><code>## class       : RasterLayer 
+## dimensions  : 3601, 3601, 12967201  (nrow, ncol, ncell)
+## resolution  : 0.0002777778, 0.0002777778  (x, y)
+## extent      : 36.99986, 38.00014, 54.99986, 56.00014  (xmin, xmax, ymin, ymax)
+## coord. ref. : +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0 
+## data source : /Users/aleksandrsheludkov/Desktop/ConfSchoolsSeminars/AnDan_Cartography_LSh2018/data/ASTGTM2_N55E037_dem.tif 
+## names       : ASTGTM2_N55E037_dem 
+## values      : -32768, 32767  (min, max)</code></pre>
+<p>Что это за территория? Попробуем взглянуть на картинку</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(elev)</code></pre></div>
+<p><img src="Part-3_files/figure-html/elevation%202-1.png" width="672" /> <em>Source</em>: USGS.</p>
+<hr />
+<div id="-4" class="section level4">
+<h4>3.3.1. Задание 4</h4>
+<p>Откройте ту же территорию в leaflet (используйет данные из свойств <code>RasterLayer</code>)</p>
+<hr />
+</div>
+</div>
+<div id="-----rastervis" class="section level3">
+<h3>3.4. Визуализация растровых изображений с помощью <code>rasterVis</code></h3>
+<p>Построим простую карту высот</p>
+<div id="-" class="section level4">
+<h4>3.4.1 Подготовка данных</h4>
+<p>Для начала удалим все лишнее, обрезав растр в границах города</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Чтение данных о границах</span>
+moscow &lt;-<span class="st"> </span><span class="kw">shapefile</span>(<span class="st">&quot;data/mos_ao/ao.shp&quot;</span>)
+<span class="kw">plot</span>(moscow)</code></pre></div>
+<p><img src="Part-3_files/figure-html/moscow%20borders-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">moscow<span class="op">@</span>data</code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["NAME"],"name":[1],"type":["chr"],"align":["left"]},{"label":["OKATO"],"name":[2],"type":["chr"],"align":["left"]},{"label":["ABBREV"],"name":[3],"type":["chr"],"align":["left"]}],"data":[{"1":"Троицкий","2":"45298000","3":"Троицкий"},{"1":"Новомосковский","2":"45297000","3":"Новомосковский"},{"1":"Зеленоградский","2":"45272000","3":"ЗелАО"},{"1":"Юго-Западный","2":"45293000","3":"ЮЗАО"},{"1":"Юго-Восточный","2":"45290000","3":"ЮВАО"},{"1":"Центральный","2":"45286000","3":"ЦАО"},{"1":"Северный","2":"45277000","3":"САО"},{"1":"Северо-Западный","2":"45283000","3":"СЗАО"},{"1":"Северо-Восточный","2":"45280000","3":"СВАО"},{"1":"Южный","2":"45296000","3":"ЮАО"},{"1":"Восточный","2":"45263000","3":"ВАО"},{"1":"Западный","2":"45268000","3":"ЗАО"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
+<span class="co"># Чтение данных о границах</span>
+elev <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">crop</span>(moscow) <span class="op">%&gt;%</span><span class="st">                      </span><span class="co"># returns raster clipped by Spatial* object’s extent</span>
+<span class="st">  </span><span class="kw">mask</span>(moscow) -&gt;<span class="st"> </span>elev_cropped          <span class="co"># returns raster, clipped by Spatial* object’s contour</span>
+elev_cropped</code></pre></div>
+<pre><code>## class       : RasterLayer 
+## dimensions  : 3089, 3483, 10758987  (nrow, ncol, ncell)
+## resolution  : 0.0002777778, 0.0002777778  (x, y)
+## extent      : 36.99986, 37.96736, 55.14208, 56.00014  (xmin, xmax, ymin, ymax)
+## coord. ref. : +proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0 
+## data source : in memory
+## names       : ASTGTM2_N55E037_dem 
+## values      : 9, 293  (min, max)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(elev_cropped)</code></pre></div>
+<p><img src="Part-3_files/figure-html/crop%20elevation-1.png" width="672" /></p>
+</div>
+<div class="section level4">
+<h4>3.4.2 Интервалы</h4>
+<p>Какой перевад высот мы получили? Взглянем на гистограмму</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
+<span class="kw">ggplot</span>()<span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(<span class="kw">values</span>(elev_cropped)))</code></pre></div>
+<p><img src="Part-3_files/figure-html/elev%20val%20distr-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(<span class="kw">values</span>(elev_cropped))</code></pre></div>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA&#39;s 
+##       9     156     176     176     196     293 6462532</code></pre>
+<p>Есть небольшое число выбросов, проигнорируем их</p>
+</div>
+<div id="levelplot" class="section level4">
+<h4>3.4.3 Levelplot</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(rasterVis)
+<span class="kw">levelplot</span>(elev_cropped, 
+          <span class="dt">at=</span><span class="kw">seq</span>(<span class="dv">75</span>, <span class="dv">300</span>, <span class="dv">25</span>),
+          <span class="dt">col.regions=</span><span class="kw">colorRampPalette</span>(<span class="kw">rev</span>(<span class="kw">brewer.pal</span>(<span class="dv">10</span>, <span class="st">&#39;RdYlGn&#39;</span>))),
+          <span class="dt">margin=</span><span class="ot">FALSE</span>, <span class="dt">colorkey=</span><span class="kw">list</span>(<span class="dt">space=</span><span class="st">&#39;bottom&#39;</span>,
+                                      <span class="dt">labels=</span><span class="kw">list</span>(<span class="dt">at=</span><span class="kw">seq</span>(<span class="dv">75</span>, <span class="dv">300</span>, <span class="dv">25</span>), <span class="dt">font=</span><span class="dv">4</span>),
+                                      <span class="dt">axis.line=</span><span class="kw">list</span>(<span class="dt">col=</span><span class="st">&#39;black&#39;</span>),
+                                      <span class="dt">width=</span><span class="fl">0.75</span>),
+          <span class="dt">par.settings=</span><span class="kw">list</span>(<span class="dt">strip.border=</span><span class="kw">list</span>(<span class="dt">col=</span><span class="st">&#39;transparent&#39;</span>),
+                            <span class="dt">strip.background=</span><span class="kw">list</span>(<span class="dt">col=</span><span class="st">&#39;transparent&#39;</span>),
+                            <span class="dt">axis.line=</span><span class="kw">list</span>(<span class="dt">col=</span><span class="st">&#39;transparent&#39;</span>)),
+          <span class="dt">xlab =</span> <span class="ot">NULL</span>,
+          <span class="dt">ylab =</span> <span class="ot">NULL</span>,
+          <span class="dt">scales=</span><span class="kw">list</span>(<span class="dt">draw=</span><span class="ot">FALSE</span>),
+          <span class="dt">alpha.regions =</span> <span class="dv">1</span>)</code></pre></div>
+<p><img src="Part-3_files/figure-html/elevation%20plot-1.png" width="672" /></p>
+</div>
+</div>
+<div id="--" class="section level3">
+<h3>3.5. А что если?</h3>
+<div id="-----------" class="section level4">
+<h4>3.5.1 А что если я хочу вытащить статистику из растра по отдельным полигонам?</h4>
+<p>…и не обрезать растр каждый раз<br />
+<code>extract()</code> из пакета <code>raster</code></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">extract</span>(elev_cropped,   <span class="co"># RasterLayer</span>
+        moscow,         <span class="co"># SpatialPolygon</span>
+        <span class="dt">fun =</span> mean,     <span class="co"># функция</span>
+        <span class="co"># sp = T,       # сохрани результат расчета в таблицу атрибутов Spatial* объекта</span>
+        <span class="dt">df =</span> T)         <span class="co"># верни табличку </span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["ID"],"name":[1],"type":["int"],"align":["right"]},{"label":["ASTGTM2_N55E037_dem"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"1","2":"194.9746"},{"1":"2","2":"175.1131"},{"1":"3","2":"206.1938"},{"1":"4","2":"196.0636"},{"1":"5","2":"135.6297"},{"1":"6","2":"146.1363"},{"1":"7","2":"170.8879"},{"1":"8","2":"154.9963"},{"1":"9","2":"158.7010"},{"1":"10","2":"155.7975"},{"1":"11","2":"153.9886"},{"1":"12","2":"163.6180"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>а что если растр такой тяжелый, а у меня не видеокарта для майнинга?</p>
+<p>Тогда используй пакет velox. Он использует другие алгоритмы вычислений. Минус в том, что velox работает только с объектами собственных классов</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(velox)
+<span class="co"># создаем объект velox из нашего растра</span>
+my_velox &lt;-<span class="st"> </span><span class="kw">velox</span>(elev_cropped)
+<span class="co"># доступные функции хранятся в свойствах самого объекта.</span>
+<span class="co"># Вызываем их через $</span>
+my_velox<span class="op">$</span><span class="kw">extract</span>(<span class="dt">sp =</span> moscow, 
+                 <span class="dt">fun =</span> mean, 
+                 <span class="dt">df =</span> T)</code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["ID_sp"],"name":[1],"type":["fctr"],"align":["left"]},{"label":["out"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"0","2":"194.9746"},{"1":"1","2":"175.1131"},{"1":"2","2":"206.1938"},{"1":"4","2":"196.0636"},{"1":"5","2":"135.6297"},{"1":"6","2":"146.1363"},{"1":"7","2":"170.8879"},{"1":"8","2":"154.9963"},{"1":"9","2":"158.7010"},{"1":"10","2":"155.7975"},{"1":"11","2":"153.9886"},{"1":"12","2":"163.6180"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p><em>Посмотреть/почитать:</em> ссылка на мой гит</p>
+</div>
+<div id="-------levelplot--" class="section level4">
+<h4>3.5.2 А что если я хочу добавить в levelplot векторные объекты?</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">levelplot</span>(elev_cropped, 
+          <span class="dt">at=</span><span class="kw">seq</span>(<span class="dv">75</span>, <span class="dv">300</span>, <span class="dv">25</span>),
+          <span class="dt">col.regions=</span><span class="kw">colorRampPalette</span>(<span class="kw">rev</span>(<span class="kw">brewer.pal</span>(<span class="dv">10</span>, <span class="st">&#39;RdYlGn&#39;</span>))),
+          <span class="dt">margin=</span><span class="ot">FALSE</span>, <span class="dt">colorkey=</span><span class="kw">list</span>(<span class="dt">space=</span><span class="st">&#39;bottom&#39;</span>,
+                                      <span class="dt">labels=</span><span class="kw">list</span>(<span class="dt">at=</span><span class="kw">seq</span>(<span class="dv">75</span>, <span class="dv">300</span>, <span class="dv">25</span>), <span class="dt">font=</span><span class="dv">4</span>),
+                                      <span class="dt">axis.line=</span><span class="kw">list</span>(<span class="dt">col=</span><span class="st">&#39;black&#39;</span>),
+                                      <span class="dt">width=</span><span class="fl">0.75</span>),
+          <span class="dt">par.settings=</span><span class="kw">list</span>(<span class="dt">strip.border=</span><span class="kw">list</span>(<span class="dt">col=</span><span class="st">&#39;transparent&#39;</span>),
+                            <span class="dt">strip.background=</span><span class="kw">list</span>(<span class="dt">col=</span><span class="st">&#39;transparent&#39;</span>),
+                            <span class="dt">axis.line=</span><span class="kw">list</span>(<span class="dt">col=</span><span class="st">&#39;transparent&#39;</span>)),
+          <span class="dt">xlab =</span> <span class="ot">NULL</span>,
+          <span class="dt">ylab =</span> <span class="ot">NULL</span>,
+          <span class="dt">scales=</span><span class="kw">list</span>(<span class="dt">draw=</span><span class="ot">FALSE</span>),
+          <span class="dt">alpha.regions =</span> <span class="dv">1</span>)<span class="op">+</span>
+<span class="st">  </span><span class="kw">layer</span>(<span class="kw">sp.lines</span>(moscow, <span class="dt">col =</span> <span class="st">&quot;grey32&quot;</span>, <span class="dt">lwd =</span> <span class="fl">1.5</span>))</code></pre></div>
+<p><img src="Part-3_files/figure-html/levelplot_vectors-1.png" width="672" /></p>
+</div>
+<div id="--------" class="section level4">
+<h4>3.5.3 А что если я хочу хочу сохранить мой растр?</h4>
+</div>
+</div>
+
+<br><br><br>
+<p><center> &copy; <b>2018</b> Александр Шелудков, Институт географии РАН </center> </p>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

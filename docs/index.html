@@ -214,19 +214,16 @@ $(document).ready(function () {
   </a>
 </li>
 <li>
-  <a href="Part-1.html">Part 1. Basic concepts</a>
+  <a href="Part-1.html">1. Базовые концепты</a>
 </li>
 <li>
-  <a href="Part-2.html">Part 2. Data mining. Geocoding</a>
+  <a href="Part-2.html">2. Векторные данные</a>
 </li>
 <li>
-  <a href="Part-3.html">Part 3. Spatial data manipulation</a>
+  <a href="Part-3.html">3. Растровые данные</a>
 </li>
 <li>
-  <a href="Part-4.html">Part 4. Spatial data visualization</a>
-</li>
-<li>
-  <a href="map.html">Final MAP</a>
+  <a href="Part-4.html">4. Выборки. ggplot</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -242,28 +239,26 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">Анализ и визуализация пространственных данных в R</h1>
 <h4 class="author"><em>Александр Шелудков</em></h4>
-<h4 class="date"><em>24 07 2018</em></h4>
+<h4 class="date"><em>25 07 2018</em></h4>
 
 </div>
 
 
-<p>Only Practice, Only Hardcore! During the workshop we will learn what spatial data really is, and how one creates it. You will get familiar with the basic concepts, such as coordinate system and projection, vector and raster data, points, lines, polygons, grids, shape- and geojson files. Together we will study open sources of spatial data; learn popular desktop tools and web-cartography instruments. A case study will be dedicated to urban morphology of Perm. We will study form and spatial structure of the city, revealing history of its formation and spatial growth.</p>
+<blockquote>
+<p>АнДан. Летняя школа 2018</p>
+</blockquote>
 <hr />
-<p><strong>Нам понадобиятся</strong>:<br />
-1. Пекеты для работы с пространственными данными:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">source</span>(<span class="st">&quot;Istall_required_packages.R&quot;</span>)</code></pre></div>
-<pre><code>## Warning in strptime(x, &quot;%Y-%m-%d-%H-%M-%OS&quot;, tz = tz): unknown timezone
-## &#39;zone/tz/2018c.1.0/zoneinfo/Asia/Yekaterinburg&#39;</code></pre>
+<p><strong>Нам понадобятся</strong>:<br />
+1. Пакеты для работы с пространственными данными:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&quot;sp&quot;</span>, <span class="st">&quot;raster&quot;</span>, <span class="st">&quot;rgdal&quot;</span>, <span class="st">&quot;rgeos&quot;</span>, <span class="st">&quot;RColorBrewer&quot;</span>, <span class="st">&quot;lattice&quot;</span>, <span class="st">&quot;ggplot2&quot;</span>, <span class="st">&quot;rasterVis&quot;</span>, <span class="st">&quot;dplyr&quot;</span>, <span class="st">&quot;cartography&quot;</span>, <span class="st">&quot;leaflet&quot;</span>, <span class="st">&quot;velox&quot;</span>)</code></pre></div>
 <ol start="2" style="list-style-type: decimal">
-<li>QGIS <a href="https://www.qgis.org/" class="uri">https://www.qgis.org/</a> (лучше 2.18, так как 3.0 пока работает нестабильно)<br />
-</li>
+<li>QGIS <a href="https://www.qgis.org/" class="uri">https://www.qgis.org/</a> + установить QuickMapServices module<br />
+или NextGIS</li>
 </ol>
-<ul>
-<li>установить QuickMapServices module или NextGIS ***</li>
-</ul>
+<hr />
 
 <br><br><br>
-<p><center> &copy; <b>2018</b> Alexander Sheludkov, Institute of Geography, RAS </center> </p>
+<p><center> &copy; <b>2018</b> Александр Шелудков, Институт географии РАН </center> </p>
 
 
 

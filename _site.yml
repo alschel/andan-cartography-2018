@@ -8,9 +8,9 @@ navbar:
     href: Part-1.html
   - text: 2. Векторные данные
     href: Part-2.html
-  - text: 3. Геоаналитика
+  - text: 3. Растровые данные
     href: Part-3.html
-  - text: 4. хэёРастры
+  - text: 4. Выборки. ggplot
     href: Part-4.html
 output:
   html_document:
