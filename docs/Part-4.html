@@ -435,6 +435,53 @@ bars_utm &lt;-<span class="st"> </span><span class="kw">spTransform</span>(bars,
 </div>
 <div id="ggplot-----" class="section level3">
 <h3>4.4. ggplot() - великий и ужасный</h3>
+<div class="section level4">
+<h4>4.4.1 Полигоны</h4>
+<p><strong>Подготовка данных</strong><br />
+Так как ggplot привык работать с data.frame, первое, что мы должны сделать - преобразовать Spatial* object в df так, чтобы у нас появились колонки long и lat. Делается это с помощью встроенной в ggplot2 функции fortify()</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">fortify</span>(moscow) <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">id =</span> <span class="kw">as.numeric</span>(id)) -&gt;<span class="st"> </span>moscow_fort 
+<span class="kw">str</span>(moscow_fort)</code></pre></div>
+<pre><code>## &#39;data.frame&#39;:    19867 obs. of  7 variables:
+##  $ long : num  36.8 36.8 36.8 36.8 36.8 ...
+##  $ lat  : num  55.4 55.4 55.5 55.5 55.5 ...
+##  $ order: int  1 2 3 4 5 6 7 8 9 10 ...
+##  $ hole : logi  FALSE FALSE FALSE FALSE FALSE FALSE ...
+##  $ piece: Factor w/ 7 levels &quot;1&quot;,&quot;2&quot;,&quot;3&quot;,&quot;4&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ id   : num  0 0 0 0 0 0 0 0 0 0 ...
+##  $ group: Factor w/ 27 levels &quot;0.1&quot;,&quot;0.2&quot;,&quot;1.1&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...</code></pre>
+<p>Единственная проблема: во время преобразования fortify() отбрасывает атрибутивные данные. Придется их снова приклеить</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">moscow<span class="op">@</span>data <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">id =</span> <span class="dv">0</span><span class="op">:</span>(<span class="kw">nrow</span>(moscow<span class="op">@</span>data)<span class="op">-</span><span class="dv">1</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">right_join</span>(moscow_fort, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;id&quot;</span> =<span class="st"> &quot;id&quot;</span>)) -&gt;<span class="st"> </span>moscow_fort</code></pre></div>
+<p>А теперь</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>()<span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_polygon</span>(<span class="dt">data =</span> moscow_fort,
+               <span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">group =</span> group,
+                   <span class="dt">fill =</span> <span class="kw">factor</span>(NAME)))</code></pre></div>
+<p><img src="Part-4_files/figure-html/ggplot-1.png" width="672" /></p>
+<p>Посмотреть/почитать: <a href="https://timogrossenbacher.ch/2016/12/beautiful-thematic-maps-with-ggplot2-only/" class="uri">https://timogrossenbacher.ch/2016/12/beautiful-thematic-maps-with-ggplot2-only/</a></p>
+</div>
+<div class="section level4">
+<h4>4.4.2 Точки</h4>
+<p>С точками немного проще: сохраним координаты в отдельные столбцы</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bars<span class="op">@</span>data <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">x =</span> <span class="kw">coordinates</span>(bars)[,<span class="dv">1</span>],
+         <span class="dt">y =</span> <span class="kw">coordinates</span>(bars)[,<span class="dv">2</span>]) -&gt;<span class="st"> </span>bars<span class="op">@</span>data</code></pre></div>
+<p>Визуализируем</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>()<span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_polygon</span>(<span class="dt">data =</span> <span class="kw">aggregate</span>(moscow), 
+               <span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">group =</span> group), <span class="dt">alpha =</span> <span class="fl">0.5</span>, <span class="dt">col =</span> <span class="st">&quot;grey3&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;steelblue&quot;</span> )<span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data =</span> bars<span class="op">@</span>data, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">col =</span> <span class="kw">factor</span>(craft_beer)), 
+             <span class="dt">size =</span> <span class="fl">1.3</span>,  <span class="dt">alpha =</span> <span class="fl">0.5</span>)</code></pre></div>
+<p><img src="Part-4_files/figure-html/points%20vis-1.png" width="672" /></p>
+</div>
+<div id="density" class="section level4">
+<h4>4.4.3 Density</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(bars<span class="op">@</span>data, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y))<span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_polygon</span>(<span class="dt">data =</span> <span class="kw">aggregate</span>(moscow), 
+               <span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">group =</span> group), <span class="dt">alpha =</span> <span class="fl">0.5</span>, <span class="dt">col =</span> <span class="st">&quot;grey3&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;steelblue&quot;</span> )</code></pre></div>
+<p><img src="Part-4_files/figure-html/density-1.png" width="672" /></p>
+</div>
 </div>
 
 <br><br><br>
