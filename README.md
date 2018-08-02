@@ -1,6 +1,6 @@
 # andan-cartography-2018
 
-<div style="width:300px; height:300px">![](resources/flag.jpg)</div>
+<div style="width:300px; height:300px"><a href="">![](resources/resources/flag.jpg)</a></div>  
 
 Материалы курса по анализу и визуализации пространственных данных для трека "Визуализация", мастерская АнДан
 
