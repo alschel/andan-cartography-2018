@@ -1,6 +1,5 @@
 # andan-cartography-2018
 
-/*<div style="width:300px; height:300px">[](https://github.com/alschel/andan-cartography-2018/blob/master/resources/flag.jpg)</div> */
 <img src="https://github.com/alschel/andan-cartography-2018/blob/master/resources/flag.jpg" height="250" width="250">
 
 Материалы курса по анализу и визуализации пространственных данных для трека "Визуализация", мастерская АнДан
