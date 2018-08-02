@@ -16,7 +16,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ***
 
 **Нам понадобятся**:  
-1. Пакеты для работы с пространственными данными:  
+1. Пакеты:  
 ```{r install_packages, eval=FALSE, message=FALSE, include=TRUE, results="hide"}
 install.packages("sp", "raster", "rgdal", "rgeos", "RColorBrewer", "lattice", "ggplot2", "rasterVis", "dplyr", "cartography", "leaflet", "velox")
 ```
